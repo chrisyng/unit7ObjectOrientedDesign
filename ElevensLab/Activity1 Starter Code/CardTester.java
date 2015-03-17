@@ -8,6 +8,21 @@ public class CardTester {
 	 *	@param args is not used.
 	 */
 	public static void main(String[] args) {
-		/* *** TO BE IMPLEMENTED IN ACTIVITY 1 *** */
+		Card card1 = new Card("Jack", "Clubs", 11);
+		Card card2 = new Card("Jack", "Clubs", 11);
+		Card card3 = new Card("Ace", "Hearts", 1);
+		if (card1.matches(card3))
+		{
+		    System.out.println("fail");
+		}
+		else
+		{
+		    System.out.println("yay");
+		  }
+		if (card1.matches(card2))
+		{
+		    System.out.println("cards match");
+		}
+		card3.toString();
 	}
 }
