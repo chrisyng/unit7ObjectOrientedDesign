@@ -43,7 +43,7 @@ public class ElevensBoard extends Board {
 
     /**
      * Determines if the selected cards form a valid group for removal.
-     * In Elevens, the legal groups are (1) a pair of non-face cards
+     * In Elevens, the legal groups are (1) a pair of non-face cards      
      * whose values add to 11, and (2) a group of three cards consisting of
      * a jack, a queen, and a king in some order.
      * @param selectedCards the list of the indices of the selected cards.
@@ -77,13 +77,8 @@ public class ElevensBoard extends Board {
      */
     @Override
     public boolean anotherPlayIsPossible() {
-        Card[] cards = super.getCards();
-        List<Integer> newCards = new ArrayList<Integer>();
-        for (Card card: cards)
-        {
-            newCards.add(card.pointValue());
-        }
-        return containsPairSum11(newCards) || containsJQK(newCards);
+        List<Integer> indexes = cardIndexes();        
+        return containsPairSum11(indexes) || containsJQK(indexes);
     }
 
     /**
@@ -95,12 +90,17 @@ public class ElevensBoard extends Board {
      *              contain an 11-pair; false otherwise.
      */
     private boolean containsPairSum11(List<Integer> selectedCards) {        
-        int total=0;
-        for (Integer cardIndex : selectedCards)
+        for (Integer first: selectedCards)
         {
-            total += super.cardAt(cardIndex).pointValue();
+            int firstIndex = first.intValue();
+            for (Integer second: selectedCards)
+            {
+                int secondIndex = second.intValue();
+                if (cardAt(firstIndex).pointValue() + cardAt(secondIndex).pointValue() == 11)
+                {return true;}                
+            }
         }
-        return total == 11;       
+        return false;
     }
 
     /**
@@ -112,11 +112,21 @@ public class ElevensBoard extends Board {
      *              include a jack, a queen, and a king; false otherwise.
      */
     private boolean containsJQK(List<Integer> selectedCards) {
-        int total=0;
-        for (Integer cardIndex : selectedCards)
+        boolean containsJack=false;
+        boolean containsQueen=false;
+        boolean containsKing = false;
+        for (Integer index: selectedCards)
         {
-            total += super.cardAt(cardIndex).pointValue();
+            if (cardAt(index.intValue()).rank().equals("jack")) {
+                containsJack = true;
+            }
+            if (cardAt(index.intValue()).rank().equals("queen")) {
+                containsQueen = true;
+            }
+            if (cardAt(index.intValue()).rank().equals("king")){
+                containsKing = true;
+            }
         }
-        return total == 11+12+13;
+        return containsJack && containsQueen && containsKing;
     }
 }
